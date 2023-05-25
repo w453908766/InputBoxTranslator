@@ -7,11 +7,11 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["contextMenus"],
+  "permissions": ["contextMenus", "storage"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["jquery.js", "contentScript.js"]
+      "js": ["contentScript.js"]
     }
   ],
   "commands": {
@@ -19,7 +19,11 @@
       "suggested_key": {
         "default": "Alt+W"
       },
-      "description": "Quickly translate the text you write"
+      "description": "Translate and replace the text you write"
     }
+  },
+	"action": {
+		"default_title": "InputBox Translator",
+		"default_popup": "popup.html"
   }
 }

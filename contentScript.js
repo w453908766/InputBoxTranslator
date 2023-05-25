@@ -51,5 +51,7 @@ function forTextBox(element, callback) {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  forTextBox(document.activeElement, translate('auto', 'en'))
+  chrome.storage.sync.get({targetLanguage: 'en'}, function({targetLanguage}) {
+    forTextBox(document.activeElement, translate('auto', targetLanguage))
+  })
 })
