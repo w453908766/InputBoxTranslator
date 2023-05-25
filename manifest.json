@@ -17,7 +17,7 @@
   "commands": {
     "run-translate": {
       "suggested_key": {
-        "default": "Alt+M"
+        "default": "Alt+W"
       },
       "description": "Quickly translate the text you write"
     }

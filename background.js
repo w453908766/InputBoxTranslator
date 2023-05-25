@@ -15,7 +15,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 })
 
 chrome.commands.onCommand.addListener((command, tab) => {
-  console.log(tab)
   if(command === "run-translate"){
     chrome.tabs.sendMessage(tab.id, {})
   }
