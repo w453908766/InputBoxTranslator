@@ -31,6 +31,8 @@ async function youdaoTranslate(sl, tl, text) {
   return t.translateResult.map((ts)=>ts.map(({tgt})=>tgt).join('')).join('')
 }
 
+let translateMap = {'google': googleTranslate, 'youdao': youdaoTranslate}
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "translateAndReplace",
@@ -45,8 +47,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 })
 
-
-
 chrome.commands.onCommand.addListener((command, tab) => {
   if(command === "run-translate"){
     chrome.tabs.sendMessage(tab.id, {})
@@ -55,11 +55,8 @@ chrome.commands.onCommand.addListener((command, tab) => {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if(request.kind === 'translate'){
-    chrome.storage.sync.get({targetLanguage: 'en'}, async function({targetLanguage}) {
-      console.log(request.text)
-      let res = await youdaoTranslate('auto', targetLanguage, request.text)
-      // let res = await googleTranslate('auto', targetLanguage, request.text)
-      console.log(res)
+    chrome.storage.sync.get({translator:'google', language: 'en'}, async function({translator, language}) {
+      let res = await translateMap[translator]('auto', language, request.text)
       sendResponse(res)
     })
   }
