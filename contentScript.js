@@ -1,17 +1,8 @@
 
-function translate(sl, tl) {
-  async function f(text) {
-    let args = {client: "gtx", hl: 'en', sl, tl, q: text, dj: 1}
-    let query = new URLSearchParams(args)
-    let url = "https://translate.googleapis.com/translate_a/single?dt=t&dt=bd&dt=qc&dt=rm&dt=ex&" + query.toString()
-    let res = await fetch(url, {
-      method: "GET",
-      headers: { Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" }
-    })
-    let t = await res.json()
-    return t.sentences.map((s) => s.trans).join('')
-  }
-  return f
+function translate(text) {
+  return new Promise((resolve, reject) =>
+    chrome.runtime.sendMessage({kind:'translate', text}, resolve)
+  )
 }
 
 async function forInput(element, callback) {
@@ -51,7 +42,5 @@ function forTextBox(element, callback) {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  chrome.storage.sync.get({targetLanguage: 'en'}, function({targetLanguage}) {
-    forTextBox(document.activeElement, translate('auto', targetLanguage))
-  })
+  forTextBox(document.activeElement, translate)
 })
